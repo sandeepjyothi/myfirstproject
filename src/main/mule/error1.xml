@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="2c06ffc2-05da-4a54-8a94-98b13d908d99" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="137a2191-f85b-409d-b203-b468185184a2" />
+	<flow name="error1Flow" doc:id="fc2d6973-199d-4303-882b-86ff00914146" >
+		<http:listener doc:name="Listener" doc:id="bc80fd18-23b4-4236-b365-110b4b772d42" config-ref="HTTP_Listener_config" path="/error1">
+			<http:error-response >
+				<http:body ><![CDATA[#[output text/plain --- payload]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<set-payload value='#["sandy"]' doc:name="Set Payload" doc:id="843c4cad-4fdd-4fe3-a51e-0b2a44218068" />
+		<flow-ref doc:name="Flow Reference" doc:id="6ce256d2-6636-464a-9171-1bbc4e04933c" name="error1Flow1"/>
+		<logger level="INFO" doc:name="Logger" doc:id="3a2468c2-cd3a-471e-9c5b-0f3f36fd405e" message="-----------------------------logger---------------"/>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="2b24d341-39cb-40ac-af71-a85a617dcbd6" >
+				<set-payload value="#['abcdeep']" doc:name="Set Payload" doc:id="b0b65f06-cd65-4c50-bd50-72c2275522c5" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
+	<flow name="error1Flow1" doc:id="b9bd336e-6ce0-4524-967f-797ff89f94d3" >
+		<try doc:name="Try" doc:id="dd95fc91-9da9-4456-aff2-09121589acd5" >
+			<http:request method="GET" doc:name="Request" doc:id="cfeca75e-7f56-4924-bc4c-825192a230fc" config-ref="HTTP_Request_configuration" url="http:lkhyfdrytdch:8081/yyfydt"/>
+			<set-payload value="#[payload]" doc:name="Set Payload" doc:id="22635a9a-360f-4cdf-a1ec-80e115d6d1e0" />
+			<error-handler >
+				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="164c2c56-b8ec-491b-b34c-ffde04a2d1f3">
+					<set-payload value='#["mnobnm"]' doc:name="Set Payload" doc:id="3f301084-5845-4824-988c-df747355c65c" />
+			</on-error-propagate>
+			</error-handler>
+		</try>
+		<set-payload value='#["sandeep"]' doc:name="Set Payload" doc:id="ff5fba8e-1e76-49f3-bed2-fdc23ceb9317" />
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="983742ad-5549-48ae-a281-b9be158d6184" >
+				<set-payload value='#["12334556"]' doc:name="Set Payload" doc:id="8a6f35e4-e8ba-445a-b490-adc355ba001e" />
+				<logger level="INFO" doc:name="Logger" doc:id="b28316d7-3e76-453f-a509-bdfd0e8c861f" message="-------------khftz------------" />
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>
